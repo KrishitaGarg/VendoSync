@@ -21,11 +21,28 @@ const Signin = () => {
       return;
     }
     try {
+      const response = await fetch("/api/vendors/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to sign in");
+      }
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("vendorId", data.vendorId);
+      alert("Sign in successful!");
       navigate("/dashboard");
+
     } catch (err) {
       setError("Invalid credentials.");
     }
   };
+  
 
   return (
     <section className="relative min-h-screen flex items-center text-left overflow-hidden">
