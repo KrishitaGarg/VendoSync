@@ -21,7 +21,7 @@ const Signin = () => {
       return;
     }
     try {
-      const response = await fetch("/api/vendors", {
+      const response = await fetch("/api/vendors/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
