@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import "./JoinMarketplace.css";
+import { useNavigate } from "react-router-dom";
 
 export default function JoinMarketplace() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
-    businessName: "",
-    country: "",
+    legalBusinessName: "",
+    countryOfIncorporation: "",
     market: "India",
     taxId: "",
-    email: "",
-    phone: "",
+    businessEmail: "",
+    businessPhone: "",
     password: "",
     confirmPassword: "",
     agree: false,
-  });
+  }); 
 
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -25,10 +27,18 @@ export default function JoinMarketplace() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.agree) return;
+    if (!form.agree) {
+      alert("Please agree to the terms and conditions.");
+      return;
+    }
     setLoading(true);
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match.");
+      setLoading(false);
+      return;
+    }    
     try {
-      const response = await fetch("/api/join-marketplace", {
+      const response = await fetch("/api/vendors", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,9 +49,23 @@ export default function JoinMarketplace() {
         alert("Failed to create account.");
       } else {
         alert("Account created successfully!");
+        setForm({
+          firstName: "",
+          lastName: "",
+          legalBusinessName: "",
+          countryOfIncorporation: "",
+          market: "India",
+          taxId: "",
+          businessEmail: "",
+          businessPhone: "",
+          password: "",
+          confirmPassword: "",
+          agree: false,
+        });
+        navigate("/signin");
       }
     } catch (error) {
-      alert("An error occurred.");
+      alert(`An error occurred: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -88,8 +112,8 @@ export default function JoinMarketplace() {
               <label>Legal business name</label>
               <input
                 type="text"
-                name="businessName"
-                value={form.businessName}
+                name="legalBusinessName"
+                value={form.legalBusinessName}
                 onChange={handleChange}
                 required
                 className="input-style"
@@ -109,8 +133,8 @@ export default function JoinMarketplace() {
             <div>
               <label>Country/Region of incorporation</label>
               <select
-                name="country"
-                value={form.country}
+                name="countryOfIncorporation"
+                value={form.countryOfIncorporation}
                 onChange={handleChange}
                 required
                 className="input-style"
@@ -135,8 +159,8 @@ export default function JoinMarketplace() {
               <label>Business email address</label>
               <input
                 type="email"
-                name="email"
-                value={form.email}
+                name="businessEmail"
+                value={form.businessEmail}
                 onChange={handleChange}
                 required
                 className="input-style"
@@ -146,8 +170,8 @@ export default function JoinMarketplace() {
               <label>Business phone number</label>
               <input
                 type="text"
-                name="phone"
-                value={form.phone}
+                name="businessPhone"
+                value={form.businessPhone}
                 onChange={handleChange}
                 required
                 className="input-style"
