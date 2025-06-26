@@ -39,6 +39,78 @@ export default function AddItem() {
     setForm({ ...form, [name]: value });
   };
 
+  const handleAudioInput = async () => {
+    if (!vendorId || !token) return alert("Authentication info missing.");
+
+    setLoading(true);
+
+    try {
+      // Request mic access
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      const chunks = [];
+
+      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(chunks, { type: "audio/wav" });
+        const formData = new FormData();
+        formData.append("audio", blob, "input.wav");
+        formData.append("language", "1"); // 1 = English
+
+        // Send to Whisper backend
+        const response = await fetch("/transcribe", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Transcription failed");
+
+        const transcription = data.transcription;
+        console.log("Transcription:", transcription);
+
+        // Parse the transcription
+        const parsed = parseTranscription(transcription);
+        setForm((prev) => ({ ...prev, ...parsed }));
+      };
+
+      mediaRecorder.start();
+
+      // Stop recording after 5 seconds
+      setTimeout(() => {
+        mediaRecorder.stop();
+        stream.getTracks().forEach((track) => track.stop());
+      }, 5000);
+    } catch (err) {
+      alert("Error during recording: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const parseTranscription = (text) => {
+    // Simple regex-based parsing for demonstration
+    const output = {};
+
+    const matchItem = text.match(
+      /(?:add\s)?(\d+)\s*(kg|g|liters|units)?\s+of\s+(\w+)/i
+    );
+    if (matchItem) {
+      output.quantity = matchItem[1];
+      output.unit = matchItem[2] || "";
+      output.itemName = matchItem[3];
+    }
+
+    const categoryMatch = text.match(/category\s*(\w+)/i);
+    if (categoryMatch) output.category = categoryMatch[1];
+
+    const priceMatch = text.match(/price\s*(\d+)/i);
+    if (priceMatch) output.pricePerUnit = priceMatch[1];
+
+    return output;
+  };
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!vendorId || !token) return alert("Authentication info missing.");
@@ -81,6 +153,10 @@ export default function AddItem() {
   return (
     <div className="inventory-management">
       <h2>Add Inventory Item</h2>
+      <button type="button" onClick={handleAudioInput}>
+        {loading ? "Processing..." : "Add by Voice"}
+      </button>
+      <p>Or fill out the form below:</p>
       <form onSubmit={handleSubmit}>
         <input
           name="itemName"
