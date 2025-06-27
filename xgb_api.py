@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import xgboost as xgb
 from typing import Dict, Any
+import uvicorn
 
 app = FastAPI()
 
@@ -46,5 +47,4 @@ async def health_check():
     return {"status": "healthy"}
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
