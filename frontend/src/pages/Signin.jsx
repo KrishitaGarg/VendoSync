@@ -5,7 +5,7 @@ import registerImage from "../assets/registerPage.png";
 import mainVideo from "../assets/main_video.mp4";
 
 const Signin = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ businessEmail: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -16,18 +16,21 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.password) {
+    if (!form.businessEmail || !form.password) {
       setError("Please fill in all fields.");
       return;
     }
     try {
-      const response = await fetch("/api/vendors/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/vendors/signin`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to sign in");
@@ -36,7 +39,7 @@ const Signin = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("vendorId", data.vendorId);
       alert("Sign in successful!");
-      navigate("/dashboard");
+      navigate("/inventory");
 
     } catch (err) {
       setError("Invalid credentials.");
@@ -83,8 +86,8 @@ const Signin = () => {
               <label>Email</label>
               <input
                 type="email"
-                name="email"
-                value={form.email}
+                name="businessEmail"
+                value={form.businessEmail}
                 onChange={handleChange}
                 required
                 autoComplete="username"
