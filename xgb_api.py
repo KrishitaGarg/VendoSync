@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import pickle
 import pandas as pd
 import numpy as np
+import xgboost as xgb
 from typing import Dict, Any
 
 app = FastAPI()
