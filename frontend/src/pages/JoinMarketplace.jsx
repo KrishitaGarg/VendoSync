@@ -38,13 +38,16 @@ export default function JoinMarketplace() {
       return;
     }    
     try {
-      const response = await fetch("/api/vendors", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/vendors`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        }
+      );
       if (!response.ok) {
         alert("Failed to create account.");
       } else {
