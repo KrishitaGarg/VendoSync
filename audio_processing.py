@@ -6,8 +6,24 @@ from transformers import pipeline
 import tempfile
 import os
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
+import shutil
+import os
+
+os.environ["PATH"] += os.pathsep + r"C:\ffmpeg\bin"
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
