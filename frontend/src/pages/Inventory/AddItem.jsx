@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AddItemByVoice from "./AddItemByVoice";
 
 export default function AddItem() {
   const navigate = useNavigate();
@@ -36,67 +37,9 @@ export default function AddItem() {
     setForm({ ...form, [name]: value });
   };
 
-  const handleAudioInput = async () => {
-    if (!vendorId || !token) return alert("Authentication info missing.");
-    setLoading(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      const chunks = [];
-      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-      mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunks, { type: "audio/wav" });
-        const fd = new FormData();
-        fd.append("audio", blob, "input.wav");
-        fd.append("language", "1");
-        const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/transcribe`,
-          { method: "POST", body: fd }
-        );
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Transcription failed");
-        const parsed = parseTranscription(data.transcription);
-        setForm((prev) => ({ ...prev, ...parsed }));
-      };
-      mediaRecorder.start();
-      setTimeout(() => {
-        mediaRecorder.stop();
-        stream.getTracks().forEach((t) => t.stop());
-      }, 5000);
-    } catch (err) {
-      alert("Audio Error: " + err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const parseTranscription = (text) => {
-    const output = {};
-    const matchItem = text.match(
-      /(?:add\s)?(\d+)\s*(kg|kilo|grams|g|liters|litre|units|piece)?\s+of\s+(\w+)/i
-    );
-    if (matchItem) {
-      const unitRaw = matchItem[2]?.toLowerCase() || "";
-      const unitMap = {
-        kg: "kg",
-        kilo: "kilo",
-        g: "kg",
-        grams: "kg",
-        litres: "litre",
-        liters: "litre",
-        litre: "litre",
-        units: "piece",
-        piece: "piece",
-      };
-      output.quantity = matchItem[1];
-      output.unit = unitMap[unitRaw] || "";
-      output.itemName = matchItem[3];
-    }
-    const cat = text.match(/category\s*(\w+)/i);
-    if (cat) output.category = cat[1].toLowerCase();
-    const pr = text.match(/price\s*(\d+(\.\d+)?)/i);
-    if (pr) output.pricePerUnit = pr[1];
-    return output;
+  const handleVoiceResult = (parsed) => {
+    console.log("Voice Result Parsed:", parsed);
+    setForm((prev) => ({ ...prev, ...parsed }));
   };
 
   const handleSubmit = async (e) => {
@@ -172,7 +115,14 @@ export default function AddItem() {
         <div className="flex justify-center mb-4">
           <button
             type="button"
-            onClick={handleAudioInput}
+            onClick={() =>
+              AddItemByVoice({
+                token,
+                vendorId,
+                setLoading,
+                onResult: handleVoiceResult,
+              })
+            }
             className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition"
           >
             {loading ? "Processing..." : "Add by Voice"}
