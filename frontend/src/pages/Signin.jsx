@@ -48,7 +48,7 @@ const Signin = () => {
   
 
   return (
-    <section className="relative min-h-screen flex items-center text-left overflow-hidden">
+    <section className="relative min-h-screen flex items-center text-left overflow-hidden" style={{ backgroundColor: "#6696fd" }}>
       {/* Background Video with Blur */}
       <video
         src={mainVideo}
