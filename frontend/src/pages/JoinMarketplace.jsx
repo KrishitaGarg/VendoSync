@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./JoinMarketplace.css";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,37 @@ export default function JoinMarketplace() {
     password: "",
     confirmPassword: "",
     agree: false,
-  }); 
+    location: {
+      type: "Point",
+      coordinates: [0, 0],
+    },
+  });
+  
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setForm((prevForm) => ({
+            ...prevForm,
+            location: {
+              type: "Point",
+              coordinates: [
+                position.coords.longitude,
+                position.coords.latitude,
+              ],
+            },
+          }));
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          alert("Unable to retrieve your location. Please enter it manually.");
+        },
+      );
+    } else {
+      console.error("Geolocation not supported by this browser.");
+    }
+  }, []);
+  
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -38,6 +68,7 @@ export default function JoinMarketplace() {
       return;
     }    
     try {
+      console.log("Form data being submitted:", form);
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/api/vendors`,
         {
@@ -61,6 +92,10 @@ export default function JoinMarketplace() {
           taxId: "",
           businessEmail: "",
           businessPhone: "",
+          location: {
+            type: "Point",
+            coordinates: [0, 0],
+          },
           password: "",
           confirmPassword: "",
           agree: false,
@@ -180,6 +215,25 @@ export default function JoinMarketplace() {
                 className="input-style"
               />
             </div>
+            <div>
+              <label>Latitude</label>
+              <input
+                type="number"
+                value={form.location.coordinates[1]}
+                readOnly
+                className="input-style"
+              />
+            </div>
+            <div>
+              <label>Longitude</label>
+              <input
+                type="number"
+                value={form.location.coordinates[0]}
+                readOnly
+                className="input-style"
+              />
+            </div>
+
             <div>
               <label>Password</label>
               <input
