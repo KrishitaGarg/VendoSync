@@ -58,6 +58,7 @@ export const registerVendor = async (req, res) => {
       businessPhone,
       password,
       confirmPassword,
+      location
     } = req.body;
 
     if (
@@ -70,7 +71,8 @@ export const registerVendor = async (req, res) => {
       !businessEmail ||
       !businessPhone ||
       !password ||
-      !confirmPassword
+      !confirmPassword ||
+      !location
     ) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -104,6 +106,7 @@ export const registerVendor = async (req, res) => {
       businessEmail,
       businessPhone,
       password,
+      location,
     });
 
     const savedVendor = await vendor.save();

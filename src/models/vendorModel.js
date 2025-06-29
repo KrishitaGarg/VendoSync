@@ -63,7 +63,22 @@ const VendorSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true,
+    },
+  },
+},{
+  timestamps: true,
 });
+
+VendorSchema.index({ location: "2dsphere" });
 
 // Hash password before saving
 VendorSchema.pre('save', async function (next) {
