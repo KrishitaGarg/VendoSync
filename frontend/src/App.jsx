@@ -7,6 +7,8 @@ import AddItem from "./pages/Inventory/AddItem";
 import InventoryManagement from "./pages/InventoryManagement";
 import EditItem from "./pages/Inventory/EditItem";
 import ItemList from "./pages/Inventory/ItemList";
+import Dashboard from "./pages/Dashboard";
+
 export default function App() {
   return (
     <Router>
@@ -19,6 +21,7 @@ export default function App() {
         <Route path="/inventory" element={<InventoryManagement />} />
         <Route path="/edit-item/:id" element={<EditItem />} />
         <Route path="/item-list" element={<ItemList />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
