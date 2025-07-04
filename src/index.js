@@ -5,6 +5,7 @@ import connectDB from "./db/db.js";
 import vendorRoute from "./routes/vendorRoute.js";
 import inventoryRoute from "./routes/inventoryManageRoute.js";
 import dashboardRoute from "./routes/dashboardRoute.js";
+import poolRoute from "./routes/poolRoute.js";
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ connectDB();
 app.use("/api/vendors", vendorRoute);
 app.use("/api/inventory", inventoryRoute);
 app.use("/api/dashboard", dashboardRoute);
-
+app.use("/api/pools", poolRoute);
 
 
 
