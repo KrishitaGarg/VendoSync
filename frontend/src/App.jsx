@@ -13,6 +13,8 @@ import Vendors from "./pages/Admin/Vendors";
 import NearbyVendors from "./pages/NearbyVendors";
 import Analytics from "./pages/Analytics";
 import VendorPooling from "./pages/VendorPooling";
+import SignupAdmin from "./pages/Admin/SignupAdmin";
+import SigninAdmin from "./pages/Admin/SigninAdmin";
 
 export default function App() {
   return (
@@ -32,6 +34,8 @@ export default function App() {
         <Route path="/nearby-vendors" element={<NearbyVendors />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/vendor-pooling" element={<VendorPooling />} />
+        <Route path="/admin-signup" element={<SignupAdmin />} />
+        <Route path="/admin/signin" element={<SigninAdmin />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
