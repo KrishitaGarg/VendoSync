@@ -7,6 +7,7 @@ import {
   FaUsers,
   FaSignOutAlt,
 } from "react-icons/fa";
+import Sidebar from "../components/Sidebar";
 
 export default function InventoryManagement() {
   const navigate = useNavigate();
@@ -22,44 +23,7 @@ export default function InventoryManagement() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-blue-600 text-white flex flex-col p-6">
-        <h2 className="text-2xl font-bold mb-10">VendoSync</h2>
-        <nav className="flex flex-col gap-4">
-          <Link
-            to="/dashboard"
-            className="flex items-center gap-3 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaHome /> Dashboard
-          </Link>
-          <Link
-            to="/inventory"
-            className="flex items-center gap-3 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaBoxes /> Inventory
-          </Link>
-          <Link
-            to="#"
-            className="flex items-center gap-3 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaChartBar /> Analytics
-          </Link>
-          <Link
-            to="#"
-            className="flex items-center gap-3 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaUsers /> Nearby Vendors
-          </Link>
-          <button
-            onClick={() => {
-              localStorage.clear();
-              navigate("/signin");
-            }}
-            className="flex items-center gap-3 hover:bg-red-500 p-2 rounded mt-auto"
-          >
-            <FaSignOutAlt /> Logout
-          </button>
-        </nav>
-      </aside>
+      <Sidebar />
 
       {/* Main Content */}
       <main className="flex-1 p-10">
