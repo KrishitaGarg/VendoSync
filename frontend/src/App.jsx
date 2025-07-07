@@ -8,6 +8,11 @@ import InventoryManagement from "./pages/InventoryManagement";
 import EditItem from "./pages/Inventory/EditItem";
 import ItemList from "./pages/Inventory/ItemList";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/Admin/Dashboard";
+import Vendors from "./pages/Admin/Vendors";
+import NearbyVendors from "./pages/NearbyVendors";
+import Analytics from "./pages/Analytics";
+import VendorPooling from "./pages/VendorPooling";
 
 export default function App() {
   return (
@@ -22,6 +27,12 @@ export default function App() {
         <Route path="/edit-item/:id" element={<EditItem />} />
         <Route path="/item-list" element={<ItemList />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/vendors" element={<Vendors />} />
+        <Route path="/nearby-vendors" element={<NearbyVendors />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/vendor-pooling" element={<VendorPooling />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
   );
