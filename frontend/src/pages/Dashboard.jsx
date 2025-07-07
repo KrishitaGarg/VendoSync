@@ -8,6 +8,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import axios from "axios";
+import Sidebar from "../components/Sidebar";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -61,41 +62,7 @@ export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-blue-600 text-white flex flex-col p-4">
-        <h2 className="text-2xl font-bold mb-8">VendoSync</h2>
-        <nav className="flex flex-col gap-4">
-          <a
-            href="#"
-            className="flex items-center gap-2 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaHome /> Dashboard
-          </a>
-          <a
-            href="/inventory"
-            className="flex items-center gap-2 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaBoxes /> Inventory
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-2 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaChartBar /> Analytics
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-2 hover:bg-blue-500 p-2 rounded"
-          >
-            <FaUsers /> Nearby Vendors
-          </a>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 hover:bg-red-500 p-2 rounded mt-auto"
-          >
-            <FaSignOutAlt /> Logout
-          </button>
-        </nav>
-      </aside>
+      <Sidebar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
