@@ -62,12 +62,16 @@ export const joinPool = async (req, res) => {
     if (!pool) {
       return res.status(404).json({ message: "Pool not found" });
     }
+    
+    if (!Array.isArray(pool.vendors)) {
+      pool.vendorsInvolved = [];
+    }
 
-    if (pool.vendorsInvolved.includes(vendorId)) {
+    if (pool.vendors.includes(vendorId)) {
       return res.status(400).json({ message: "Vendor already joined this pool" });
     }
 
-    pool.vendorsInvolved.push(vendorId);
+    pool.vendors.push(vendorId);
     await pool.save();
 
     res.status(200).json({ message: "Vendor joined pool", pool });
