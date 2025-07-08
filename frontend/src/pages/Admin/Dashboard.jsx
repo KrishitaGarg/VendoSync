@@ -4,21 +4,42 @@ import Sidebar from "./AdminSidebar";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const adminToken = localStorage.getItem("adminToken");
   const role = localStorage.getItem("role");
 
   React.useEffect(() => {
-    if (!token || role !== "admin") {
+    if (!adminToken || role !== "admin") {
       navigate("/admin/signin");
     }
-  }, [token, role, navigate]);
+  }, [adminToken, role, navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     localStorage.removeItem("adminId");
     localStorage.removeItem("role");
     navigate("/admin/signin");
   };
+
+  const cards = [
+    {
+      title: "Inventory",
+      path: "/admin/inventory",
+      bg: "bg-blue-100",
+      icon: "📦",
+    },
+    {
+      title: "Analytics",
+      path: "/admin/dashboard",
+      bg: "bg-green-100",
+      icon: "📊",
+    },
+    {
+      title: "Vendors",
+      path: "/admin/vendors",
+      bg: "bg-yellow-100",
+      icon: "🏢",
+    },
+  ];
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -35,10 +56,25 @@ export default function AdminDashboard() {
           </button>
         </header>
 
-        <main className="flex-1 p-6 flex justify-center items-center">
-          <h2 className="text-3xl font-semibold text-gray-700">
+        <main className="flex-1 p-6 flex flex-col items-center">
+          <h2 className="text-3xl font-semibold text-gray-700 mb-8">
             Welcome to the Admin Dashboard
           </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+            {cards.map((card, idx) => (
+              <div
+                key={idx}
+                onClick={() => navigate(card.path)}
+                className={`cursor-pointer ${card.bg} p-6 h-48 rounded-xl shadow hover:shadow-md transition flex flex-col items-center justify-center text-center`}
+              >
+                <div className="text-5xl mb-4">{card.icon}</div>
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {card.title}
+                </h3>
+              </div>
+            ))}
+          </div>
         </main>
       </div>
     </div>
