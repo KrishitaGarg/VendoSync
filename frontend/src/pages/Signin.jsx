@@ -48,7 +48,17 @@ const Signin = () => {
   
 
   return (
-    <section className="relative min-h-screen flex items-center text-left overflow-hidden" style={{ backgroundColor: "#6696fd" }}>
+    <section
+      className="relative min-h-screen flex items-center text-left overflow-hidden"
+      style={{ backgroundColor: "#6696fd" }}
+    >
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-4 left-4 z-10 bg-white text-blue-600 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition"
+      >
+        ← Back to Home
+      </button>
+
       {/* Background Video with Blur */}
       <video
         src={mainVideo}
