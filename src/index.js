@@ -13,8 +13,9 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:3000', 'https://vendosync.onrender.com'];
 app.use(cors({
-  origin: "http://localhost:3000",  // Allow requests from your React dev server
+  origin: allowedOrigins,  // Allow requests from your React dev server
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
