@@ -37,7 +37,7 @@ const Signin = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("adminToken", data.token);
       localStorage.setItem("adminId", data._id);
       localStorage.setItem("role", data.role);
       alert("Admin login successful!");

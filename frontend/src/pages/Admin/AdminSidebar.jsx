@@ -12,7 +12,7 @@ const AdminSidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     localStorage.removeItem("adminId");
     localStorage.removeItem("role");
     navigate("/admin/signin");
@@ -35,7 +35,7 @@ const AdminSidebar = () => {
           <FaBoxes /> Inventory
         </a>
         <a
-          href="#"
+          href="/admin/dashboard"
           className="flex items-center gap-2 hover:bg-indigo-600 p-2 rounded"
         >
           <FaChartBar /> Analytics

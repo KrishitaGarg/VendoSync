@@ -16,18 +16,19 @@ export default function Vendors() {
 
   useEffect(() => {
     const fetchVendors = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.warn("No token found in localStorage");
+      const adminToken = localStorage.getItem("adminToken");
+
+      if (!adminToken) {
+        console.warn("No adminToken found in localStorage");
         return;
       }
 
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/vendors`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/admin/vendors`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${adminToken}`,
             },
           }
         );
@@ -42,7 +43,7 @@ export default function Vendors() {
   
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     navigate("/admin/signin");
   };
 
