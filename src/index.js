@@ -7,6 +7,7 @@ import inventoryRoute from "./routes/inventoryManageRoute.js";
 import dashboardRoute from "./routes/dashboardRoute.js";
 import poolRoute from "./routes/poolRoute.js";
 import adminRoute from "./routes/adminRoute.js";
+import adminInventoryRoute from "./routes/inventoryAdminRoute.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use("/api/inventory", inventoryRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/pools", poolRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/admin/inventories", adminInventoryRoute);
 
 app.get("/", (req, res) => {
   res.send("W-Setu Core Backend is Running");
