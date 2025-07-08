@@ -65,7 +65,7 @@ const inventorySchema = new mongoose.Schema({
   },
   source: {
     type: String,
-    enum: ["local", "W\walmart", "cooperative", "other"],
+    enum: ["local", "walmart", "cooperative", "other"],
     default: "local",
   },
   notes: {
