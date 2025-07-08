@@ -14,7 +14,7 @@ export const getAllInventoriesForAdmin = async (req, res) => {
       search = "",
       lowStock,
       expired,
-      firstNameName,
+      firstName,
     } = req.query;
 
     const query = {};
@@ -35,7 +35,7 @@ export const getAllInventoriesForAdmin = async (req, res) => {
     }
 
     // Filter by vendor first name
-    if (vendorFirstName) {
+    if (firstName) {
       const matchingVendors = await Vendor.find({
         firstName: { $regex: firstName, $options: "i" },
       }).select("_id");
