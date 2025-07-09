@@ -1,5 +1,8 @@
 import Inventory from "../models/inventoryManagementModel.js";
 import { translateToEnglish } from "../utils/translate.js";
+import { sendSMS } from "../utils/sms.js";
+import { smsTemplates } from "../utils/smsTemplates.js";
+import Vendor from "../models/vendorModel.js";
 
 // Helper functions to normalize enums
 const normalizeCategory = (category) => {
@@ -86,6 +89,18 @@ export const addInventoryItem = async (req, res) => {
     });
 
     await newItem.save();
+
+    const vendorDoc = await Vendor.findById(vendor);
+    if (vendorDoc && vendorDoc.businessPhone){
+      try{
+        await sendSMS(
+          vendorDoc.businessPhone,
+          smsTemplates.inventoryAdded(itemName)
+        );
+      } catch(smsError){
+        console.error("Failed to send inventory add SMS", smsError.message);
+      }
+    }
     res.status(201).json({ message: "Item added", item: newItem });
 
   } catch (error) {
@@ -155,6 +170,24 @@ export const updateInventoryItem = async (req, res) => {
     }
 
     res.status(200).json({ message: "Item updated", item: updatedItem });
+
+    if (updatedItem) {
+      const vendorDoc = await Vendor.findById(updatedItem.vendor);
+      if (vendorDoc && vendorDoc.businessPhone) {
+        try {
+          await sendSMS(
+            vendorDoc.businessPhone,
+            smsTemplates.inventoryUpdated(updatedItem.itemName)
+          );
+        } catch (smsError) {
+          console.error("Failed to send inventory update SMS:", smsError.message);
+        }
+      }
+      res.status(200).json({ message: "Item updated", item: updatedItem });
+    } else {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
 
   } catch (error) {
     console.error("Error updating inventory item:", error);
