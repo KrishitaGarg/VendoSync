@@ -87,14 +87,14 @@ export const addInventoryItem = async (req, res) => {
     // Save all items in one go
     const savedItems = await Inventory.insertMany(inventoryDocs);
 
-    const vendorDoc = await Vendor.findById(vendor);
+    const vendorDoc = await Vendor.findById(savedItems[0].vendor);
     if (vendorDoc && vendorDoc.businessPhone){
-      try{
+      try {
         await sendSMS(
           vendorDoc.businessPhone,
-          smsTemplates.inventoryAdded(itemName)
+          smsTemplates.inventoryAdded(savedItems[0].itemName)
         );
-      } catch(smsError){
+      } catch (smsError) {
         console.error("Failed to send inventory add SMS", smsError.message);
       }
     }
