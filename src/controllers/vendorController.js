@@ -1,9 +1,9 @@
 import Vendor from "../models/vendorModel.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
-import {sendSMS}  from "../utils/sms.js";
-import {SmsCommandContextImpl} from "twilio/lib/rest/supersim/v1/smsCommand.js";
-import smsTemplates  from "../utils/smsTemplates.js";
+import { sendSMS }  from "../utils/sms.js";
+import { SmsCommandContextImpl } from "twilio/lib/rest/supersim/v1/smsCommand.js";
+import { smsTemplates }  from "../utils/smsTemplates.js";
 
 
 /**
