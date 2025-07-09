@@ -29,7 +29,7 @@ export default function AdminDashboard() {
     },
     {
       title: "Analytics",
-      path: "/admin/dashboard",
+      path: "/admin/analytics",
       bg: "bg-green-100",
       icon: "📊",
     },

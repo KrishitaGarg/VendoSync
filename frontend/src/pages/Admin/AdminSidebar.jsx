@@ -35,7 +35,7 @@ const AdminSidebar = () => {
           <FaBoxes /> Inventory
         </a>
         <a
-          href="/admin/dashboard"
+          href="/admin/analytics"
           className="flex items-center gap-2 hover:bg-indigo-600 p-2 rounded"
         >
           <FaChartBar /> Analytics
