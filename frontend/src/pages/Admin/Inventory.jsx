@@ -24,6 +24,14 @@ export default function Inventory() {
     vendorName: true,
     businessEmail: true,
   });
+  const adminToken = localStorage.getItem("adminToken");
+  const role = localStorage.getItem("role");
+
+  React.useEffect(() => {
+    if (!adminToken || role !== "admin") {
+      navigate("/admin/signin");
+    }
+  }, [adminToken, role, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -67,7 +75,6 @@ export default function Inventory() {
       setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchInventory();
