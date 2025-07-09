@@ -13,9 +13,21 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000', 'https://w-setuindia.vercel.app', 'https://vendosync.onrender.com'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://w-setuindia.vercel.app',
+  'https://vendosync.onrender.com'
+];
+
 app.use(cors({
-  origin: allowedOrigins,  // Allow requests from your React dev server
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow requests with no origin (e.g. curl)
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
