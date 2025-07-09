@@ -1,7 +1,7 @@
 import Inventory from "../models/inventoryManagementModel.js";
 import { translateToEnglish } from "../utils/translate.js";
 import { smsTemplates } from "../utils/smsTemplates.js";
-import {sms} from "../utils/sms.js";
+import { sendSMS } from "../utils/sms.js";
 import Vendor from "../models/vendorModel.js";
 
 // Helper functions to normalize enums
