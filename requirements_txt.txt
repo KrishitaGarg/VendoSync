@@ -1,9 +1,0 @@
-fastapi
-uvicorn
-whisper
-torch
-transformers
-xgboost
-pydantic
-pandas
-numpy
