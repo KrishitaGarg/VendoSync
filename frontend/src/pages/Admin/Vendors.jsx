@@ -13,6 +13,14 @@ import Sidebar from "./AdminSidebar";
 export default function Vendors() {
   const navigate = useNavigate();
   const [vendors, setVendors] = useState([]);
+  const adminToken = localStorage.getItem("adminToken");
+  const role = localStorage.getItem("role");
+
+  React.useEffect(() => {
+    if (!adminToken || role !== "admin") {
+      navigate("/admin/signin");
+    }
+  }, [adminToken, role, navigate]);
 
   useEffect(() => {
     const fetchVendors = async () => {
@@ -40,7 +48,6 @@ export default function Vendors() {
 
     fetchVendors();
   }, []);
-  
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
