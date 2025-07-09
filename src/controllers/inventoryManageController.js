@@ -1,8 +1,5 @@
 import Inventory from "../models/inventoryManagementModel.js";
 import { translateToEnglish } from "../utils/translate.js";
-import { sendSMS } from "../utils/sms.js";
-import { smsTemplates } from "../utils/smsTemplates.js";
-import Vendor from "../models/vendorModel.js";
 
 // Helper functions to normalize enums
 const normalizeCategory = (category) => {
@@ -29,82 +26,67 @@ const normalizeUnit = (unit) => {
  */
 export const addInventoryItem = async (req, res) => {
   try {
-    let {
-      vendor,
-      itemName,
-      category,
-      customCategory,
-      quantity,
-      unit,
-      customUnit,
-      pricePerUnit,
-      expiryInDays,
-      expiryDate,
-      source,
-      notes,
-    } = req.body;
+    const items = Array.isArray(req.body) ? req.body : [req.body]; // Handle both array and object
+    const inventoryDocs = [];
 
-    // Basic validation
-    if (!vendor || !itemName || !category || !quantity || !unit || !pricePerUnit) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+    for (let item of items) {
+      let {
+        vendor,
+        itemName,
+        category,
+        customCategory,
+        quantity,
+        unit,
+        customUnit,
+        pricePerUnit,
+        expiryInDays,
+        expiryDate,
+        source,
+        notes,
+      } = item;
 
-    // ✅ Translate to English and normalize inputs
-    itemName = (await translateToEnglish(itemName)).trim();
-    category = (await translateToEnglish(category)).trim().toLowerCase();
-    category = normalizeCategory(category);           // <-- Normalize category
-    unit = (await translateToEnglish(unit)).trim().toLowerCase();
-    unit = normalizeUnit(unit);                         // <-- Normalize unit
-    source = (await translateToEnglish(source)).trim().toLowerCase();
-
-    if (category === "other" && customCategory) {
-      customCategory = (await translateToEnglish(customCategory)).trim();
-    } else {
-      customCategory = undefined;
-    }
-
-    if (unit === "other" && customUnit) {
-      customUnit = (await translateToEnglish(customUnit)).trim();
-    } else {
-      customUnit = undefined;
-    }
-
-    if (notes) {
-      notes = (await translateToEnglish(notes)).trim();
-    }
-
-    const newItem = new Inventory({
-      vendor,
-      itemName,
-      category,
-      customCategory,
-      quantity,
-      unit,
-      customUnit,
-      pricePerUnit,
-      expiryInDays,
-      expiryDate,
-      source,
-      notes,
-    });
-
-    await newItem.save();
-
-    const vendorDoc = await Vendor.findById(vendor);
-    if (vendorDoc && vendorDoc.businessPhone){
-      try{
-        await sendSMS(
-          vendorDoc.businessPhone,
-          smsTemplates.inventoryAdded(itemName)
-        );
-      } catch(smsError){
-        console.error("Failed to send inventory add SMS", smsError.message);
+      // Basic validation
+      if (!vendor || !itemName || !category || !quantity || !unit || !pricePerUnit) {
+        return res.status(400).json({ message: "Missing required fields in one or more items" });
       }
+
+      // Translation and normalization
+      itemName = (await translateToEnglish(itemName)).trim();
+      category = normalizeCategory((await translateToEnglish(category)).trim().toLowerCase());
+      unit = normalizeUnit((await translateToEnglish(unit)).trim().toLowerCase());
+      source = source ? (await translateToEnglish(source)).trim().toLowerCase() : "local";
+      customCategory =
+        category === "other" && customCategory
+          ? (await translateToEnglish(customCategory)).trim()
+          : undefined;
+      customUnit =
+        unit === "other" && customUnit
+          ? (await translateToEnglish(customUnit)).trim()
+          : undefined;
+      notes = notes ? (await translateToEnglish(notes)).trim() : "";
+
+      inventoryDocs.push({
+        vendor,
+        itemName,
+        category,
+        customCategory,
+        quantity,
+        unit,
+        customUnit,
+        pricePerUnit,
+        expiryInDays,
+        expiryDate,
+        source,
+        notes,
+      });
     }
-    res.status(201).json({ message: "Item added", item: newItem });
+
+    // Save all items in one go
+    const savedItems = await Inventory.insertMany(inventoryDocs);
+    res.status(201).json({ message: "Items added successfully", items: savedItems });
 
   } catch (error) {
-    console.error("Error adding inventory item:", error);
+    console.error("Error adding inventory items:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -170,24 +152,6 @@ export const updateInventoryItem = async (req, res) => {
     }
 
     res.status(200).json({ message: "Item updated", item: updatedItem });
-
-    if (updatedItem) {
-      const vendorDoc = await Vendor.findById(updatedItem.vendor);
-      if (vendorDoc && vendorDoc.businessPhone) {
-        try {
-          await sendSMS(
-            vendorDoc.businessPhone,
-            smsTemplates.inventoryUpdated(updatedItem.itemName)
-          );
-        } catch (smsError) {
-          console.error("Failed to send inventory update SMS:", smsError.message);
-        }
-      }
-      res.status(200).json({ message: "Item updated", item: updatedItem });
-    } else {
-      return res.status(404).json({ message: "Item not found" });
-    }
-
 
   } catch (error) {
     console.error("Error updating inventory item:", error);

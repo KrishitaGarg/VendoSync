@@ -1,10 +1,6 @@
 import Vendor from "../models/vendorModel.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
-import sendSMS  from "../utils/sms.js";
-import SmsCommandContextImpl from "twilio/lib/rest/supersim/v1/smsCommand.js";
-import  smsTemplates  from "../utils/smsTemplates.js";
-
 
 /**
  * @desc    Sign in vendor
@@ -31,11 +27,6 @@ export const signInVendor = async (req, res) => {
     }
 
     const token = generateToken(vendor._id);
-    // try {
-    //   await sendSMS(vendor.businessPhone, smsTemplates.signIn());
-    // } catch(smsError){
-    //   console.error("Sign-in SMS failed", smsError.message);
-    // }
 
     res.status(200).json({
       vendorId: vendor._id,
@@ -67,6 +58,7 @@ export const registerVendor = async (req, res) => {
       businessPhone,
       password,
       confirmPassword,
+      location
     } = req.body;
 
     if (
@@ -79,7 +71,8 @@ export const registerVendor = async (req, res) => {
       !businessEmail ||
       !businessPhone ||
       !password ||
-      !confirmPassword
+      !confirmPassword ||
+      !location
     ) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -113,20 +106,14 @@ export const registerVendor = async (req, res) => {
       businessEmail,
       businessPhone,
       password,
+      location,
     });
 
     const savedVendor = await vendor.save();
     const vendorObj = savedVendor.toObject();
     delete vendorObj.password;
 
-    // try{
-    //   await sendSMS(businessPhone, smsTemplates.welcome(firstName));
-    // } catch(smsError){
-    //   console.error("Registeration SMS failed", smsError.message);
-
-    // }
-
-    // Include token in response
+    // ✅ Include token in response
     res.status(201).json({
       message: "Vendor registered successfully",
       vendor: vendorObj,
