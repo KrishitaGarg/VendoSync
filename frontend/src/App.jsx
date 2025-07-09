@@ -15,6 +15,7 @@ import Analytics from "./pages/Analytics";
 import VendorPooling from "./pages/VendorPooling";
 import SignupAdmin from "./pages/Admin/SignupAdmin";
 import SigninAdmin from "./pages/Admin/SigninAdmin";
+import Inventory from "./pages/Admin/Inventory";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/vendor-pooling" element={<VendorPooling />} />
         <Route path="/admin-signup" element={<SignupAdmin />} />
         <Route path="/admin/signin" element={<SigninAdmin />} />
+        <Route path="/admin/inventory" element={<Inventory />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
