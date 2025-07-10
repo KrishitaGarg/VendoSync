@@ -39,7 +39,7 @@ const Signin = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("vendorId", data.vendorId);
       alert("Sign in successful!");
-      navigate("/inventory");
+      navigate("/dashboard");
 
     } catch (err) {
       setError("Invalid credentials.");
