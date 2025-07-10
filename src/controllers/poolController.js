@@ -1,6 +1,9 @@
 import Pool from "../models/poolModel.js";
 import Vendor from "../models/vendorModel.js";
 import { translateToEnglish } from "../utils/translate.js";
+import { sendSMS } from "../utils/sms.js";
+import { smsTemplates } from "../utils/smsTemplates.js";
+
 
 /**
  * @desc    Create a new pooling request
@@ -38,6 +41,20 @@ export const createPool = async (req, res) => {
     });
 
     await newPool.save();
+
+    //SMS to Creator
+     try {
+      if (creator.businessPhone) {
+        await sendSMS(
+          creator.businessPhone,
+          smsTemplates.poolCreated(newPool._id)
+        );
+      }
+    } catch (smsError) {
+      console.error("Failed to send pool creation SMS:", smsError.message);
+    }
+
+
     res.status(201).json({ message: "Pool created successfully", pool: newPool });
   } catch (error) {
     console.error("Error creating pool:", error.message);
@@ -73,6 +90,31 @@ export const joinPool = async (req, res) => {
 
     pool.vendors.push(vendorId);
     await pool.save();
+
+    // Send SMS 
+    try {
+      const joiningVendor = await Vendor.findById(vendorId);
+      const poolCreator = await Vendor.findById(pool.createdBy);
+
+      // Notify the joining vendor
+      if (joiningVendor && joiningVendor.businessPhone) {
+        await sendSMS(
+          joiningVendor.businessPhone,
+          smsTemplates.poolJoinConfirm(pool._id)
+        );
+      }
+
+      // Notify the pool creator
+      if (poolCreator && poolCreator.businessPhone) {
+        await sendSMS(
+          poolCreator.businessPhone,
+          smsTemplates.poolJoinNotifyCreator(joiningVendor.firstName, pool._id)
+        );
+      }
+    } catch (smsError) {
+      console.error("Failed to send pool join SMS:", smsError.message);
+    }
+
 
     res.status(200).json({ message: "Vendor joined pool", pool });
   } catch (error) {

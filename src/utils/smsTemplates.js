@@ -18,6 +18,10 @@ export const smsTemplates = {
   inventoryAdded: (itemName) => `A new inventory item "${itemName}" has been added to your account.`,
   inventoryUpdated: (itemName) => `Your inventory item "${itemName}" has been updated.`,
 
+  poolCreated: (poolId) => `Your pooling request (Pool #${poolId}) has been created successfully.`,
+  poolJoinConfirm: (poolId) => `You have joined Pool #${poolId}.`,
+  poolJoinNotifyCreator: (vendorName, poolId) => `${vendorName} has joined your Pool #${poolId}.`,
+
 
 
 
