@@ -43,16 +43,16 @@ export const createPool = async (req, res) => {
     await newPool.save();
 
     //SMS to Creator
-     try {
-      if (creator.businessPhone) {
-        await sendSMS(
-          creator.businessPhone,
-          smsTemplates.poolCreated(newPool._id)
-        );
-      }
-    } catch (smsError) {
-      console.error("Failed to send pool creation SMS:", smsError.message);
-    }
+    //  try {
+    //   if (creator.businessPhone) {
+    //     await sendSMS(
+    //       creator.businessPhone,
+    //       smsTemplates.poolCreated(newPool._id)
+    //     );
+    //   }
+    // } catch (smsError) {
+    //   console.error("Failed to send pool creation SMS:", smsError.message);
+    // }
 
 
     res.status(201).json({ message: "Pool created successfully", pool: newPool });
@@ -91,29 +91,29 @@ export const joinPool = async (req, res) => {
     pool.vendors.push(vendorId);
     await pool.save();
 
-    // Send SMS 
-    try {
-      const joiningVendor = await Vendor.findById(vendorId);
-      const poolCreator = await Vendor.findById(pool.createdBy);
+    // // Send SMS 
+    // try {
+    //   const joiningVendor = await Vendor.findById(vendorId);
+    //   const poolCreator = await Vendor.findById(pool.createdBy);
 
-      // Notify the joining vendor
-      if (joiningVendor && joiningVendor.businessPhone) {
-        await sendSMS(
-          joiningVendor.businessPhone,
-          smsTemplates.poolJoinConfirm(pool._id)
-        );
-      }
+    //   // Notify the joining vendor
+    //   if (joiningVendor && joiningVendor.businessPhone) {
+    //     await sendSMS(
+    //       joiningVendor.businessPhone,
+    //       smsTemplates.poolJoinConfirm(pool._id)
+    //     );
+    //   }
 
-      // Notify the pool creator
-      if (poolCreator && poolCreator.businessPhone) {
-        await sendSMS(
-          poolCreator.businessPhone,
-          smsTemplates.poolJoinNotifyCreator(joiningVendor.firstName, pool._id)
-        );
-      }
-    } catch (smsError) {
-      console.error("Failed to send pool join SMS:", smsError.message);
-    }
+    //   // Notify the pool creator
+    //   if (poolCreator && poolCreator.businessPhone) {
+    //     await sendSMS(
+    //       poolCreator.businessPhone,
+    //       smsTemplates.poolJoinNotifyCreator(joiningVendor.firstName, pool._id)
+    //     );
+    //   }
+    // } catch (smsError) {
+    //   console.error("Failed to send pool join SMS:", smsError.message);
+    // }
 
 
     res.status(200).json({ message: "Vendor joined pool", pool });
