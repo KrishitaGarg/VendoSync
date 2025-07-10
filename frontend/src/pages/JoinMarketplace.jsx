@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./JoinMarketplace.css";
 import { useNavigate } from "react-router-dom";
+import countryData from "country-telephone-data";
 
 export default function JoinMarketplace() {
   const [form, setForm] = useState({
@@ -51,6 +52,7 @@ export default function JoinMarketplace() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const phoneWithCode = `${form.countryCode}${form.businessPhone}`;
+  const allCountries = countryData?.allCountries || [];
 
 
   const handleChange = (e) => {
@@ -70,10 +72,15 @@ export default function JoinMarketplace() {
       setLoading(false);
       return;
     }
+
+    const cleanPhone = form.countryCode.startsWith("+")
+      ? form.countryCode + form.businessPhone
+      : "+" + form.countryCode + form.businessPhone;
+    console.log("Clean Phone:", cleanPhone);
     
     const formToSend = {
       ...form,
-      businessPhone: `${form.countryCode}${form.businessPhone}`,
+      businessPhone: cleanPhone,
     };
     
     try {
@@ -222,10 +229,11 @@ export default function JoinMarketplace() {
                   value={form.countryCode || "+91"}
                   className="country-code"
                 >
-                  <option value="+91">🇮🇳 +91</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+61">🇦🇺 +61</option>
+                  {allCountries.map((country) => (
+                    <option key={country.iso2} value={`+${country.dialCode}`}>
+                      {country.name} (+{country.dialCode})
+                    </option>
+                  ))}
                 </select>
                 <input
                   type="tel"
