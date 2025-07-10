@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const VendorSchema = new mongoose.Schema({
   firstName: {
@@ -50,11 +51,13 @@ const VendorSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
     validate: {
       validator: function (v) {
-        return /^[6-9]\d{9}$/.test(v); // 10-digit Indian mobile numbers
+        const phoneNumber = parsePhoneNumberFromString(v);
+        return phoneNumber ? phoneNumber.isValid() : false;
       },
-      message: props => `${props.value} is not a valid Indian phone number!`,
+      message: props => `${props.value} is not a valid international phone number!`,
     },
   },
   password: {

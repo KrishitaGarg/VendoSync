@@ -4,6 +4,8 @@ import generateToken from "../utils/generateToken.js";
 import { sendSMS }  from "../utils/sms.js";
 import { SmsCommandContextImpl } from "twilio/lib/rest/supersim/v1/smsCommand.js";
 import { smsTemplates }  from "../utils/smsTemplates.js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+
 
 
 /**
@@ -90,11 +92,16 @@ export const registerVendor = async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match." });
     }
+    const phoneNumberObj = parsePhoneNumberFromString(businessPhone);
+    if (!phoneNumberObj || !phoneNumberObj.isValid()) {
+      return res.status(400).json({ message: "Invalid phone number." });
+    }
+    const normalizedPhone = phoneNumberObj.number;
 
     const existingVendor = await Vendor.findOne({
       $or: [
         { businessEmail },
-        { businessPhone },
+        { businessPhone:normalizedPhone },
         { legalBusinessName },
         { taxId },
       ],
@@ -114,7 +121,7 @@ export const registerVendor = async (req, res) => {
       countryOfIncorporation,
       taxId,
       businessEmail,
-      businessPhone,
+      businessPhone:normalizedPhone,
       password,
       location,
     });
@@ -124,7 +131,7 @@ export const registerVendor = async (req, res) => {
     delete vendorObj.password;
 
     try{
-      await sendSMS(businessPhone, smsTemplates.welcome(firstName));
+      await sendSMS(normalizedPhone, smsTemplates.welcome(firstName));
     } catch(smsError){
       console.error("Registeration SMS failed", smsError.message);
 

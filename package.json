@@ -20,6 +20,7 @@
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
+    "libphonenumber-js": "^1.12.9",
     "mongoose": "^8.16.0",
     "twilio": "^5.7.2"
   },
