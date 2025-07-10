@@ -55,3 +55,27 @@
     margin-bottom: 12px;
   }
   
+  .phone-group {
+    flex: 1 1 100%;
+  }
+  
+  .phone-inputs {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .country-code {
+    width: 30%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .phone-number {
+    width: 80%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
