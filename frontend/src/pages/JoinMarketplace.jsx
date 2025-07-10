@@ -11,6 +11,7 @@ export default function JoinMarketplace() {
     market: "India",
     taxId: "",
     businessEmail: "",
+    countryCode: "+91",
     businessPhone: "",
     password: "",
     confirmPassword: "",
@@ -49,6 +50,8 @@ export default function JoinMarketplace() {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const phoneWithCode = `${form.countryCode}${form.businessPhone}`;
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -66,9 +69,14 @@ export default function JoinMarketplace() {
       alert("Passwords do not match.");
       setLoading(false);
       return;
-    }    
+    }
+    
+    const formToSend = {
+      ...form,
+      businessPhone: `${form.countryCode}${form.businessPhone}`,
+    };
+    
     try {
-      console.log("Form data being submitted:", form);
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/api/vendors`,
         {
@@ -76,7 +84,7 @@ export default function JoinMarketplace() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(form),
+          body: JSON.stringify(formToSend),
         }
       );
       if (!response.ok) {
@@ -91,6 +99,7 @@ export default function JoinMarketplace() {
           market: "India",
           taxId: "",
           businessEmail: "",
+          countryCode: "+91",
           businessPhone: "",
           location: {
             type: "Point",
@@ -204,17 +213,32 @@ export default function JoinMarketplace() {
                 className="input-style"
               />
             </div>
-            <div>
+            <div className="phone-group">
               <label>Business phone number</label>
-              <input
-                type="text"
-                name="businessPhone"
-                value={form.businessPhone}
-                onChange={handleChange}
-                required
-                className="input-style"
-              />
+              <div className="phone-inputs">
+                <select
+                  name="countryCode"
+                  onChange={handleChange}
+                  value={form.countryCode || "+91"}
+                  className="country-code"
+                >
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+61">🇦🇺 +61</option>
+                </select>
+                <input
+                  type="tel"
+                  name="businessPhone"
+                  value={form.businessPhone}
+                  onChange={handleChange}
+                  required
+                  className="phone-number"
+                  placeholder="Enter phone number"
+                />
+              </div>
             </div>
+
             <div>
               <label>Latitude</label>
               <input
