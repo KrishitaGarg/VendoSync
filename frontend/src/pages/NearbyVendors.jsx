@@ -32,7 +32,7 @@ export default function NearbyVendors() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         };
         const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/dashboard/nearby?vendorId=${vendorId}&radius=5`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/dashboard/nearby?vendorId=${vendorId}&radius=20`,
           { headers }
         );
         const fetchedVendors = res.data.vendors || [];
