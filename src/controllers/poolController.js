@@ -153,7 +153,7 @@ export const listPools = async (req, res) => {
     // ✅ Add vendorCount to each pool
     const poolsWithVendorCount = pools.map((pool) => ({
       ...pool.toObject(),
-      vendorCount: pool.vendorsInvolved?.length || 0,
+      vendorCount: pool.vendors?.length || 0,
     }));
 
     res.status(200).json(poolsWithVendorCount);
