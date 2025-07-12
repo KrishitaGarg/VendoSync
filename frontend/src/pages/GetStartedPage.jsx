@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  FaWhatsapp,
+  FaUserPlus,
   FaLanguage,
   FaMicrophone,
   FaChartLine,
@@ -13,10 +13,10 @@ const steps = [
   {
     title: { en: "Register", hi: "पंजीकरण करें" },
     description: {
-      en: "Register via WhatsApp or online.",
-      hi: "व्हाट्सएप या ऑनलाइन के माध्यम से पंजीकरण करें।",
+      en: "Register via website only.",
+      hi: "केवल वेबसाइट के माध्यम से पंजीकरण करें।",
     },
-    icon: <FaWhatsapp />,
+    icon: <FaUserPlus />,
     color: "#34D399",
   },
   {
