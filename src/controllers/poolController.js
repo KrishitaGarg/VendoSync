@@ -129,11 +129,10 @@ export const joinPool = async (req, res) => {
  */
 export const listPools = async (req, res) => {
   try {
-    const { lat, lng, radiusInKm = 5 } = req.query;
+    const { lat, lng, radiusInKm = 21 } = req.query;
 
     let query = {};
 
-    // Optional: Nearby filtering if lat/lng provided
     if (lat && lng) {
       query.location = {
         $near: {
@@ -141,13 +140,23 @@ export const listPools = async (req, res) => {
             type: "Point",
             coordinates: [parseFloat(lng), parseFloat(lat)],
           },
-          $maxDistance: radiusInKm * 1000, // convert to meters
+          $maxDistance: radiusInKm * 1000,
         },
       };
     }
 
-    const pools = await Pool.find(query).populate("createdBy", "firstName lastName businessEmail");
-    res.status(200).json(pools);
+    const pools = await Pool.find(query).populate(
+      "createdBy",
+      "firstName lastName businessEmail"
+    );
+
+    // ✅ Add vendorCount to each pool
+    const poolsWithVendorCount = pools.map((pool) => ({
+      ...pool.toObject(),
+      vendorCount: pool.vendorsInvolved?.length || 0,
+    }));
+
+    res.status(200).json(poolsWithVendorCount);
   } catch (error) {
     console.error("Error listing pools:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
