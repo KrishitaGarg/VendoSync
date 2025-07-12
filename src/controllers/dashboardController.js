@@ -47,7 +47,7 @@ export const getNearbyVendors = async (req, res) => {
             type: "Point",
             coordinates: [lng, lat]
           },
-          $maxDistance: (radius || 5) * 1000 // default 5 km
+          $maxDistance: (radius || 20) * 1000 // default 5 km
         }
       }
     }).select("-password");
