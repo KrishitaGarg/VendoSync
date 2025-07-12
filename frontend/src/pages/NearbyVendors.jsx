@@ -18,7 +18,7 @@ export default function NearbyVendors() {
           `${process.env.REACT_APP_BACKEND_URL}/api/dashboard/nearby?vendorId=${vendorId}&radius=21`,
           { headers }
         );
-        const fetchedVendors = res.data || [];
+        const fetchedVendors = res.data.vendors || [];
         console.log("Fetched nearby vendors:", fetchedVendors);
 
         setVendors(fetchedVendors);
