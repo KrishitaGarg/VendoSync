@@ -212,7 +212,7 @@ export default function VendorPooling() {
                       </ul>
                     </td>
                     <td className="px-6 py-4">
-                      {pool.vendorsInvolved?.length || 0}
+                      {pool.vendorCount || 0}
                     </td>
                     <td className="px-6 py-4">
                       {pool.location?.coordinates?.join(", ") || "N/A"}
