@@ -66,7 +66,10 @@ export const getNearbyVendors = async (req, res) => {
       }
     ]);
 
-    res.status(200).json(nearbyVendors);
+    res.status(200).json({
+      totalNearbyVendors: nearbyVendors.length,
+      vendors: nearbyVendors
+    });
   } catch (error) {
     console.error("Error fetching nearby vendors:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
