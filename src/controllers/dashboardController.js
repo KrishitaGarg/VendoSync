@@ -19,18 +19,18 @@ export const getTotalInventory = async (req,res) =>{
 };
 
 /**
- * @desc    Get nearby vendors based on location
- * @route   GET /api/dashboard/nearby?vendorId=xxx&radius=5
+ * @desc Get nearby vendors with distance in kilometers
+ * @route GET /api/dashboard/nearby?vendorId=xxx&radius=21
  */
 export const getNearbyVendors = async (req, res) => {
   try {
-    const { vendorId, radius } = req.query;
+    const { vendorId, radius = 21 } = req.query;
 
     if (!vendorId) {
       return res.status(400).json({ message: "Vendor ID is required" });
     }
 
-    // Fetch requesting vendor's coordinates
+    // Fetch vendor's coordinates
     const requestingVendor = await Vendor.findById(vendorId);
     if (!requestingVendor || !requestingVendor.location) {
       return res.status(404).json({ message: "Requesting vendor not found or location missing" });
@@ -38,21 +38,31 @@ export const getNearbyVendors = async (req, res) => {
 
     const [lng, lat] = requestingVendor.location.coordinates;
 
-    // Radius in kilometers (Mongo expects meters)
-    const nearbyVendors = await Vendor.find({
-      _id: { $ne: vendorId }, // exclude self
-      location: {
-        $near: {
-          $geometry: {
-            type: "Point",
-            coordinates: [lng, lat]
-          },
-          $maxDistance: (radius || 21) * 1000 // default 5 km
+    const vendorsWithDistance = await Vendor.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: [lng, lat] },
+          distanceField: "distanceInMeters",
+          spherical: true,
+          maxDistance: radius * 1000,
+          query: { _id: { $ne: requestingVendor._id } }
         }
+      },
+      {
+        $project: {
+          name: 1,
+          email: 1,
+          businessPhone: 1,
+          location: 1,
+          distanceInKm: { $round: [{ $divide: ["$distanceInMeters", 1000] }, 2] }
+        }
+      },
+      {
+        $unset: "password"
       }
-    }).select("-password");
+    ]);
 
-    res.status(200).json(nearbyVendors);
+    res.status(200).json(vendorsWithDistance);
   } catch (error) {
     console.error("Error fetching nearby vendors:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
