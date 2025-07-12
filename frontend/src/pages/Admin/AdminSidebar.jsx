@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
@@ -45,6 +46,12 @@ const AdminSidebar = () => {
           className="flex items-center gap-2 hover:bg-indigo-600 p-2 rounded"
         >
           <FaUsers /> Vendors
+        </a>
+        <a
+          href="/admin/route-map"
+          className="flex items-center gap-2 hover:bg-indigo-600 p-2 rounded"
+        >
+          <FaMapMarkerAlt /> Smart Route
         </a>
         <button
           onClick={handleLogout}

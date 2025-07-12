@@ -17,6 +17,7 @@ import SignupAdmin from "./pages/Admin/SignupAdmin";
 import SigninAdmin from "./pages/Admin/SigninAdmin";
 import Inventory from "./pages/Admin/Inventory";
 import AdminAnalytics from "./pages/Admin/AdminAnalytics";
+import RoutePage from "./pages/Admin/RouteMap";
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/admin/signin" element={<SigninAdmin />} />
         <Route path="/admin/inventory" element={<Inventory />} />
         <Route path="/admin/analytics" element={<AdminAnalytics />} />
+        <Route path="/admin/route-map" element={<RoutePage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
