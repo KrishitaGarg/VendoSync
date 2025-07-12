@@ -33,11 +33,11 @@ export const signInVendor = async (req, res) => {
     }
 
     const token = generateToken(vendor._id);
-    // try {
-    //   await sendSMS(vendor.businessPhone, smsTemplates.signIn());
-    // } catch(smsError){
-    //   console.error("Sign-in SMS failed", smsError.message);
-    // }
+    try {
+      await sendSMS(vendor.businessPhone, smsTemplates.signIn());
+    } catch(smsError){
+      console.error("Sign-in SMS failed", smsError.message);
+    }
 
 
     res.status(200).json({
@@ -130,12 +130,12 @@ export const registerVendor = async (req, res) => {
     const vendorObj = savedVendor.toObject();
     delete vendorObj.password;
 
-    // try{
-    //   await sendSMS(normalizedPhone, smsTemplates.welcome(firstName));
-    // } catch(smsError){
-    //   console.error("Registeration SMS failed", smsError.message);
+    try{
+      await sendSMS(normalizedPhone, smsTemplates.welcome(firstName));
+    } catch(smsError){
+      console.error("Registeration SMS failed", smsError.message);
 
-    // }
+    }
 
 
     // ✅ Include token in response
