@@ -35,15 +35,14 @@ export default function Dashboard() {
             { headers }
           ),
           axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/api/dashboard/nearby?vendorId=${vendorId}&radius=5`,
+            `${process.env.REACT_APP_BACKEND_URL}/api/dashboard/nearby?vendorId=${vendorId}&radius=21`,
             { headers }
           ),
         ]);
-
         setStats((prevStats) => ({
           ...prevStats,
           totalInventory: inventoryRes.data.totalInventory || 0,
-          vendorsJoined: nearbyRes.data.vendors?.length || 0,
+          vendorsJoined: nearbyRes.data.totalNearbyVendors || 0,
         }));
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
