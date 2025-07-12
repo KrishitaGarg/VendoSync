@@ -87,17 +87,17 @@ export const addInventoryItem = async (req, res) => {
     // Save all items in one go
     const savedItems = await Inventory.insertMany(inventoryDocs);
 
-    // const vendorDoc = await Vendor.findById(savedItems[0].vendor);
-    // if (vendorDoc && vendorDoc.businessPhone){
-    //   try {
-    //     await sendSMS(
-    //       vendorDoc.businessPhone,
-    //       smsTemplates.inventoryAdded(savedItems[0].itemName)
-    //     );
-    //   } catch (smsError) {
-    //     console.error("Failed to send inventory add SMS", smsError.message);
-    //   }
-    // }
+    const vendorDoc = await Vendor.findById(savedItems[0].vendor);
+    if (vendorDoc && vendorDoc.businessPhone){
+      try {
+        await sendSMS(
+          vendorDoc.businessPhone,
+          smsTemplates.inventoryAdded(savedItems[0].itemName)
+        );
+      } catch (smsError) {
+        console.error("Failed to send inventory add SMS", smsError.message);
+      }
+    }
 
     res.status(201).json({ message: "Items added successfully", items: savedItems });
 
@@ -169,19 +169,19 @@ export const updateInventoryItem = async (req, res) => {
 
     res.status(200).json({ message: "Item updated", item: updatedItem });
 
-    // if (updatedItem) {
-    //   const vendorDoc = await Vendor.findById(updatedItem.vendor);
-    //   if (vendorDoc && vendorDoc.businessPhone) {
-    //     try {
-    //       await sendSMS(
-    //         vendorDoc.businessPhone,
-    //         smsTemplates.inventoryUpdated(updatedItem.itemName)
-    //       );
-    //     } catch (smsError) {
-    //       console.error("Failed to send inventory update SMS:", smsError.message);
-    //     }
-    //   }
-    // }
+    if (updatedItem) {
+      const vendorDoc = await Vendor.findById(updatedItem.vendor);
+      if (vendorDoc && vendorDoc.businessPhone) {
+        try {
+          await sendSMS(
+            vendorDoc.businessPhone,
+            smsTemplates.inventoryUpdated(updatedItem.itemName)
+          );
+        } catch (smsError) {
+          console.error("Failed to send inventory update SMS:", smsError.message);
+        }
+      }
+    }
 
 
 
