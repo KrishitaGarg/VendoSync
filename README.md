@@ -1,29 +1,75 @@
-# 🛍️ VendoSync – Empowering Kiranas & Micro-Vendors
+# 🛒 W-Setu — Voice-First Supply Chain Platform for Kiranas  
+### 🚀 Walmart Sparkathon 2025 Submission
 
-**VendoSync** is a voice-first, ultra-local inventory and supply chain management platform built to support **kirana stores** and **micro-vendors** in semi-urban and rural India. It combines cutting-edge AI with low-tech accessibility to streamline stock management, demand forecasting, cooperative ordering, and more — all through voice.
-
----
-
-## 🚀 Project Highlights
-
-- 🎙️ **Voice-Based Stock Entry** in English and Hindi 
-- 📊 **Interactive Dashboard** for real-time insights on orders, inventory, and vendor activity
-- 🔄 **Overstock Redistribution** and **Bulk Ordering** with nearby kiranas
-- 🌦️ **Ultra-Local Forecasting** (festival and weather-based demand)
-- 📦 **Inventory Management**
-- 🤝 **Micro-Credit Access** and **Hyperlocal Delivery Planning**
-- 📱 Designed for **low-tech users**: minimal UI, voice-first experience
+**W-Setu** is a voice-first, AI-enabled inventory and supply chain management platform built specifically for **India’s kiranas and micro-vendors**. Designed to extend Walmart’s supply chain intelligence to Tier 2/3 cities and rural regions, W-Setu empowers vendors with low-tech tools, and gives Walmart admins real-time visibility, AI-driven insights, and last-mile delivery optimization.
 
 ---
 
-## 🧱 Tech Stack
+## 📌 Problem We Solved
 
-| Layer     | Technology                    |
-|-----------|-------------------------------|
-| Frontend  | React, Tailwind CSS |
-| Backend   | FastAPI (Python), Whisper ASR, Hugging Face Transformers |
-| Auth      | Token-based (localStorage)     |
-| Deployment| Render / Local Development     |
+While Walmart leverages AI, IoT, and automation for large-scale supply chains, **India’s kiranas remain underserved**, relying on manual stockkeeping and disconnected delivery systems. W-Setu bridges this gap with a **hyperlocal, low-tech, voice-driven solution** tailored for Bharat.
+
+---
+
+## 🧑‍💼 Admin Dashboard – Walmart’s Control Center
+
+- 🔐 **JWT-secured login** for admin access
+- 📦 View **real-time inventory** from all registered vendors  
+  - Filter by item name, category, quantity, price per unit, vendor name, and business email
+- 📈 **AI-powered demand forecasting** based on:
+  - Total stock, average discount, store traffic  
+  - Previous week/year sales  
+  - Temperature (class encoded)
+- 👥 View **detailed vendor profiles** including name, email, and market region
+- 🛣️ **AI-enabled intelligent last-mile routing**  
+  - Optimized for carts, rickshaws, and two-wheelers using Google Maps API  
+  - Adapts to traffic, rural roads, and monsoon closures
+
+---
+
+## 👤 Vendor Dashboard – Built for Bharat
+
+- 🔐 JWT-authenticated login for vendors
+- 🗣️ **Voice-based inventory entry** (Hindi + English) using Google Translate API  
+  _e.g., “Aloo 20 kilo at 30, expiry 5 din”_
+- 📊 Simple dashboard to manage current stock and track expiries
+- 📱 Mobile-friendly, **offline-first** experience
+- 📩 **Twilio SMS alerts** sent to vendors for:
+  - Successful registration  
+  - Inventory updates  
+  - Cooperative pool creation and participation  
+
+---
+
+## 🧠 AI/ML Capabilities
+
+- 🔍 **Demand Forecasting Model** (Python + Flask)
+  - Predicts spikes in item demand using multivariate data
+- 🗺️ **AI-optimized delivery routing**
+  - Designed for last-mile conditions in rural/semi-urban India
+
+---
+
+## 🔧 Tech Stack
+
+| Layer         | Tools & Frameworks                                                |
+|---------------|--------------------------------------------------------------------|
+| Frontend      | React.js, Tailwind CSS                                            |
+| Backend       | Node.js, Express.js                                               |
+| ML Services   | Python, Flask                                                     |
+| Database      | MongoDB Atlas                                                     |
+| APIs          | Google Translate API, Google Maps API, Twilio SMS API             |
+| Auth          | JSON Web Tokens (JWT)                                             |
+
+---
+
+## 💡 Why W-Setu is Unique
+
+- 🔊 **Voice-first design** — accessible to non-tech-savvy kirana owners  
+- 🌐 **Built for Bharat** — works in low-internet and multilingual conditions  
+- 📈 **Admin-only forecasting** — gives Walmart predictive visibility into grassroots demand  
+- 🛒 **Vendor transparency** — view detailed profiles and inventory from a single pane  
+- 🛣️ **Last-mile delivery intelligence** — optimized for India’s local mobility
 
 ---
 
